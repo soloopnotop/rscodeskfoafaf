@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rs Code Editor</title>
+
+    <!-- Meta Tags for SEO -->
+    <meta name="description"
+        content="An online code editor where you can write and run HTML, CSS, and JavaScript with live preview. Perfect for quick coding experiments and learning!">
+    <meta name="keywords"
+        content="online code editor, HTML, CSS, JavaScript, code editor, web development, live preview, coding playground">
+    <meta name="author" content="Tholumuzi Khuboni">
+    <meta name="robots" content="index, follow">
+
+    <!-- favicon -->
+    <link rel="shortcut icon" href="src/images/icon.png" type="image/x-icon">
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+
+    <!-- CodeMirror CSS for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/theme/dracula.min.css">
+
+    <!-- Font Awesome for the icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Roboto Mono', monospace;
+            background-color: #f4f4f9;
+        }
+  /* Style for the sticky navigation bar */
+  header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+     
+        /* Additional styling for the navbar */
+        .navbar {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #24272B !important;
+        }
+
+        .navbar-nav .nav-item .nav-link {
+            font-size: 16px;
+            font-weight: 500;
+            color: #ffffff ;
+        }
+        .navbar-light .navbar-nav .active>.nav-link {
+color: #ffffff;
+
+        }
+        .navbar-nav .nav-item .nav-link:hover {
+            color: #adadad;
+        }
+
+        .container {
+            max-width: 1200px;
+            padding-top: 30px;
+        }
+
+
+        .editor-container {
+            margin-bottom: 15px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 300px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .btn-primary {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #218838;
+        }
+
+        .btn-secondary {
+            margin: 5px;
+        }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .footer a {
+            color: #ff972a;
+            text-decoration: none;
+        }
+
+        #consoleOutput {
+            margin-top: 20px;
+            height: 150px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f5f5f5;
+            overflow-y: scroll;
+            padding: 10px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        #submit-project {
+            padding: 60px 0;
+            background-color: #f8f9fa;
+            border-top: 2px solid #ddd;
+            border-bottom: 2px solid #ddd;
+        }
+
+        #submit-project h2 {
+            color: #333;
+            font-weight: bold;
+        }
+
+        #submit-project .form-group label {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .custom-file-input:focus+.custom-file-label {
+            border-color: #28a745;
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        }
+
+        .custom-file-label {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            background-color: #f5f5f5;
+            border: 1px solid #ced4da;
+            color: #6c757d;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        .custom-file-input {
+            cursor: pointer;
+        }
+
+        .custom-file-input:hover+.custom-file-label,
+        .custom-file-input:focus+.custom-file-label {
+            background-color: #e9ecef;
+            color: #495057;
+        }
+
+        textarea {
+            font-family: monospace;
+            font-size: 1rem;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+        }
+
+        textarea:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        }
+
+        #projectSubmissionStatus {
+            font-size: 1rem;
+            color: #28a745;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+        .btn-primary {
+    color: #fff;
+    background-color: #ff972a !important;
+    border-color: #ff972a !important;
+}
+    </style>
+</head>
+
+<body>
+    <!-- Navbar (Sticky) -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <a class="navbar-brand" href="">
+            <i class="fas fa-code" style="color: #ff972a;"></i> 
+            <span style="color: #ffffff;">Rs</span> 
+            <span style="color: #ff972a;">Code</span></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <ul class="navbar-nav ms-auto" id="navLinks">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="./">
+                            <i class="fas fa-home me-2"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./editor">
+                            <i class="fas fa-pencil-alt me-2"></i> Editor
+                        </a>
+                    </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="header text-center">
+            <h1>Rs Code Editor</h1>
+            <p class="lead">Write and run HTML, CSS, and JavaScript with live preview</p>
+        </div>
+
+        <div class="row">
+            <!-- HTML Editor -->
+            <div class="col-md-4">
+                <div class="editor-container">
+                    <label for="htmlCode" class="text-muted">
+                        <i class="fa-brands fa-html5"></i> HTML Code
+                    </label>
+                    <textarea id="htmlCode" class="editor" placeholder="Write HTML code here..."></textarea>
+                </div>
+            </div>
+
+            <!-- CSS Editor -->
+            <div class="col-md-4">
+                <div class="editor-container">
+                    <label for="cssCode" class="text-muted">
+                        <i class="fa-brands fa-css3-alt"></i> CSS Code
+                    </label>
+                    <textarea id="cssCode" class="editor" placeholder="Write CSS code here..."></textarea>
+                </div>
+            </div>
+
+            <!-- JavaScript Editor -->
+            <div class="col-md-4">
+                <div class="editor-container">
+                    <label for="jsCode" class="text-muted">
+                        <i class="fa-brands fa-js"></i> JavaScript Code
+                    </label>
+                    <textarea id="jsCode" class="editor" placeholder="Write JS code here..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <!-- Action Buttons -->
+            <div class="col text-center">
+                <button class="btn btn-primary" id="runCode">
+                    <i class="fas fa-play"></i> Run Code
+                </button>
+                <button class="btn btn-secondary" id="downloadCode">
+                    <i class="fas fa-download"></i> Download Code
+                </button>
+                <button class="btn btn-secondary" id="formatCode">
+                    <i class="fas fa-align-left"></i> Format Code
+                </button>
+                <button class="btn btn-secondary" id="saveCode">
+                    <i class="fas fa-save"></i> Save Code
+                </button>
+                <button class="btn btn-secondary" id="loadCode">
+                    <i class="fas fa-folder-open"></i> Load Code
+                </button>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <!-- Live Preview -->
+            <div class="col-12">
+                <h3 class="text-center">Live Preview</h3>
+                <iframe id="preview"></iframe>
+            </div>
+        </div>
+
+        <!-- Console Output -->
+        <div class="row mt-3">
+            <div class="col-12">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <h4 class="text-center">
+                            <i class="fas fa-terminal" style="color: #ff972a; margin-right: 10px;"></i>
+                            Console Output
+                        </h4>
+                        <div id="consoleOutput"
+                            style="background-color: #222; color: white; padding: 20px; border-radius: 8px; min-height: 150px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer -->
+        <div class="footer">
+
+            <p>© 2024 Rs Code <a href="./">All rights reserved.</a></p>
+
+        </div>
+
+        <!-- Bootstrap JS and custom JavaScript -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+        <!-- CodeMirror JS for syntax highlighting -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/codemirror.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/mode/htmlmixed/htmlmixed.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/mode/css/css.min.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/mode/javascript/javascript.min.js"></script>
+        <!-- JSZip for download -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+        <!-- js-beautify for formatting -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.7/beautify.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.7/beautify-css.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.7/beautify-html.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="./src/app.js"></script>
+
+</body>
+</html>

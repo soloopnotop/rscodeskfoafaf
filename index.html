@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="An online code editor to write and run HTML, CSS, and JavaScript with live preview. Perfect for quick coding experiments and learning!">
+    <meta name="keywords"
+        content="online code editor, HTML, CSS, JavaScript, web development, coding playground, live preview">
+
+
+    <title>Welcome | Rs Code Editor</title>
+    <!-- favicon -->
+  <link rel="shortcut icon" href="src/images/icon.png" type="image/x-icon">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- FontAwesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <!-- CodeMirror CSS for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/theme/dracula.min.css">
+    
+    <style>
+        body {
+            font-family: 'Roboto Mono', monospace;
+            background-color: #ffffff;
+        }
+
+        /* Style for the sticky navigation bar */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        /* Add some space at the top of the page to prevent content being hidden under the sticky navbar */
+        body {
+            padding-top: 60px;
+            /* Adjust this based on the height of your navbar */
+        }
+
+        /* Additional styling for the navbar */
+        .navbar {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #24272B !important;
+        }
+  .navbar-light .navbar-toggler-icon {
+    background-image: url(src/images/download-13.png );
+}
+
+        .navbar-nav .nav-item .nav-link {
+            font-size: 16px;
+            font-weight: 500;
+            color: #ffffff ;
+        }
+        .navbar-light .navbar-nav .active>.nav-link {
+color: #ffffff;
+
+        }
+        .navbar-nav .nav-item .nav-link:hover {
+            color: #adadad;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            padding: 50px 0;
+            text-align: center;
+            background-color: #fff;
+      
+            margin-bottom: 50px;
+        }
+
+        .hero-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        /* Hero Section */
+.hero-section {
+    background-color: #f7f7f7;
+    padding: 50px 0;
+}
+
+.hero-section .cta-buttons {
+    display: flex;
+    justify-content: center; /* Center buttons horizontally */
+    gap: 30px; /* Custom spacing between the buttons */
+}
+
+.hero-section .cta-btn {
+    padding: 12px 25px;
+    font-size: 16px;
+    text-decoration: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.hero-section .cta-btn:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}
+
+.hero-section .cta-btn i {
+    margin-right: 8px; /* Space between icon and text */
+}
+
+        .feature-item {
+            text-align: center;
+            margin-bottom: 30px;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-item i {
+            font-size: 3rem;
+            color: #28a745;
+            margin-bottom: 15px;
+        }
+
+        .feature-item h4 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .feature-item p {
+            font-size: 1rem;
+            color: #6c757d;
+        }
+        .editor-container {
+    position: relative;
+}
+
+.editor-tabs textarea {
+    width: 100%;
+    height: 150px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    resize: none;
+}
+
+.editor-controls button {
+    margin-right: 10px;
+}
+
+.card h4 {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+#preview {
+    border-radius: 5px;
+}
+
+        /* Footer Section */
+        .footer {
+            padding: 30px 0;
+            text-align: center;
+            background-color: #ffffff;
+            color: #6c757d;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .footer a {
+            color: #ff972a;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            padding: 30px 0;
+            background-color: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .footer h5 {
+            font-size: 1.2rem;
+            color: #343a40;
+            margin-bottom: 20px;
+        }
+
+        .footer ul {
+            padding: 0;
+            list-style: none;
+        }
+
+        .footer ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer ul li a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .footer ul li a:hover {
+            text-decoration: underline;
+        }
+
+        .footer p {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        /* Responsive Layout for Mobile Devices */
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+
+            .hero-section p {
+                font-size: 1rem;
+            }
+        }
+        /* General Styling */
+.learning-hub {
+    background-color: #f8f9fa;
+}
+
+.card-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.card img {
+    transition: transform 0.3s ease;
+}
+
+.card img:hover {
+    transform: scale(1.1);
+}
+
+.card h4 {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+/* HTML Card Styling */
+.html-card {
+    background-color: #f16529;
+    color: white;
+}
+
+/* CSS Card Styling */
+.css-card {
+    background-color: #2965f1;
+    color: white;
+}
+
+/* JavaScript Card Styling */
+.js-card {
+    background-color: #f7df1e;
+    color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="">
+            <i class="fas fa-code" style="color: #ff972a;"></i> 
+            <span style="color: #ffffff;">Rs</span> 
+            <span style="color: #ff972a;">Code</span>
+        </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ms-auto" id="navLinks">
+        <li class="nav-item active">
+            <a class="nav-link" href="./">
+                <i class="fas fa-home me-2"></i> Home
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="./editor">
+                <i class="fas fa-pencil-alt me-2"></i> Editor
+            </a>
+        </li>
+    </ul>
+</div>
+        </div>
+    </nav>
+</header><!-- Hero Section -->
+<section class="hero-section">
+    <div class="container text-center">
+        <h1>Rs Code Editor</h1>
+        <p>Create, execute, and explore HTML, CSS, and JavaScript code in real-time. Ideal for learning or quick development!</p>
+    </div>
+</section>
+
+<!-- Quick Start Guide Section -->
+<section class="quick-start-guide py-5 bg-light">
+    <div class="container text-center">   
+        <div class="row justify-content-center">
+            <!-- Step 1 -->
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="fas fa-keyboard mb-3 text-primary" style="font-size: 40px;"></i>
+                        <h4>Step 1: Code Entry</h4>
+                        <p>Launch the editor and start coding your HTML, CSS, or JavaScript in real-time.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Step 2 -->
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="fas fa-desktop mb-3 text-info" style="font-size: 40px;"></i>
+                        <h4>Step 2: View Your Output</h4>
+                        <p>Observe live updates immediately. Our editor shows the results of your code as you type.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Step 3 -->
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="fas fa-share-alt mb-3 text-success" style="font-size: 40px;"></i>
+                        <h4>Step 3: Save or Share</h4>
+                        <p>When you're finished, save your work or download your code.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section text-center">
+    <div class="container">
+        <h2 class="mb-5">Main Features</h2>
+        <div class="row">
+            <div class="col-md-4 feature-item">
+                <i class="fas fa-code"></i>
+                <h4>Code Anytime</h4>
+                <p>Develop your HTML, CSS, and JavaScript code and receive immediate feedback with live preview.</p>
+            </div>
+            <div class="col-md-4 feature-item">
+                <i class="fas fa-play"></i>
+                <h4>Instant Preview</h4>
+                <p>View the outcomes of your code as you type. Excellent for web developers and learners!</p>
+            </div>
+            <div class="col-md-4 feature-item">
+                <i class="fas fa-save"></i>
+                <h4>Store and Continue</h4>
+                <p>Save your code, come back later, or share it with others for teamwork.</p>
+            </div>
+            <div class="col-md-4 feature-item">
+                <i class="fas fa-download"></i>
+                <h4>Export Code</h4>
+                <p>Download your HTML, CSS, and JavaScript code to your device as a .zip file for offline access.</p>
+            </div>
+            <div class="col-md-4 feature-item">
+                <i class="fas fa-align-left"></i>
+                <h4>Code Formatting</h4>
+                <p>Automatically format your code for improved readability and structure with a single click.</p>
+            </div>
+            <div class="col-md-4 feature-item">
+                <i class="fas fa-upload"></i>
+                <h4>Import Code</h4>
+                <p>Easily load previously saved code files and continue editing without interruption.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Learning Hub Section -->
+<section class="learning-hub py-5 bg-white">
+    <div class="container text-center">
+        <h2 class="mb-4">Learning Hub</h2>
+        <p class="mb-4">Access curated learning resources to enhance your skills in web development.</p>
+        <div class="row justify-content-center">
+            <!-- HTML Card -->
+            <div class="col-md-4 mb-4">
+                <a href="https://www.w3schools.com/html/" target="_blank" class="card-link">
+                    <div class="card shadow-sm border-0 html-card">
+                        <div class="card-body text-center">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/6/61/HTML5_logo_and_wordmark.svg" alt="HTML Logo" class="mb-3" style="width: 60px;">
+                            <h4 class="text-uppercase">Learn HTML</h4>
+                            <p>Master the structure of web pages with comprehensive HTML resources.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <!-- CSS Card -->
+            <div class="col-md-4 mb-4">
+                <a href="https://www.w3schools.com/css/" target="_blank" class="card-link">
+                    <div class="card shadow-sm border-0 css-card">
+                        <div class="card-body text-center">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d5/CSS3_logo_and_wordmark.svg" alt="CSS Logo" class="mb-3" style="width: 60px;">
+                            <h4 class="text-uppercase">Learn CSS</h4>
+                            <p>Enhance your design skills by diving into CSS tutorials and guides.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <!-- JavaScript Card -->
+            <div class="col-md-4 mb-4">
+                <a href="https://www.w3schools.com/js/" target="_blank" class="card-link">
+                    <div class="card shadow-sm border-0 js-card">
+                        <div class="card-body text-center">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png" alt="JavaScript Logo" class="mb-3" style="width: 60px;">
+                            <h4 class="text-uppercase">Learn JavaScript</h4>
+                            <p>Get hands-on with JavaScript to build dynamic and interactive web pages.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+   
+    <!-- Custom CSS for Hover Effect -->
+    <style>
+        .hover-shadow-lg:hover {
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px);
+            transition: all 0.3s ease-in-out;
+        }
+    </style>
+
+    <!-- Font Awesome for Icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <footer class="footer">
+        <div class="container">
+            <div class="row">  </div>                      
+    <footer mt-5 bg-light py-3">
+        <div class="container text-center">
+            <p class="mb-0">Copyright © 2024 Rs Code. <a href="./">All rights
+                            reserved.</a></p>
+            </div>
+            </footer>
+            <script src="./src/app.js></script>
+            <script type="module" src="scripts/auth.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+            
+            <!-- Bootstrap JS and FontAwesome for icons -->
+            <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+            <!-- CodeMirror JS for syntax highlighting -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/codemirror.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/mode/htmlmixed/htmlmixed.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/mode/css/css.min.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/mode/javascript/javascript.min.js"></script>
+        <!-- JSZip for download -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+        <!-- js-beautify for formatting -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.7/beautify.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.7/beautify-css.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.7/beautify-html.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
